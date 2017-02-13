@@ -18,6 +18,10 @@
   "bugs": {
     "url": "git://github.com/mongodb-js/connect-backbone-to-react.git/issues"
   },
+  "keywords": [
+    "backbone",
+    "react"
+  ],
   "dependencies": {
     "hoist-non-react-statics": "^1.2.0",
     "react": "^15.4.2"
