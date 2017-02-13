@@ -61,7 +61,7 @@ const WrappedComponent = connectBackboneToReact(
       user: ['change:name', 'change:laughs'], // You can disable listening to events by passing in `false`.
     },
   }
-)(MyComponent)
+)(MyComponent);
 
 ReactDOM.render(
   <WrappedComponent />,
