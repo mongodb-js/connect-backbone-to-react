@@ -1,5 +1,7 @@
 # connect-backbone-to-react [![travis][travis_img]][travis_url] [![npm][npm_img]][npm_url]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mongodb-js/connect-backbone-to-react.svg)](https://greenkeeper.io/)
+
 > Connect Backbone Models and Collections to React.
 
 ## Example
