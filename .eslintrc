@@ -13,6 +13,7 @@
     }
   },
   "rules": {
+    "eqeqeq": ["error", "smart"],
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
