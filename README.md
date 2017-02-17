@@ -4,6 +4,8 @@
 
 ## Example
 
+### connectBackboneToReact
+
 ```javascript
 const userModel = new Backbone.Model({ name: 'Harry', laughs: true });
 const userCollection = new Backbone.Collection([userModel]);
@@ -62,6 +64,8 @@ const options = {
   },
 };
 
+const { connectBackboneToReact } = require('connect-backbone-to-react');
+
 // Create our Connected HoC.
 const MyComponentConnected = connectBackboneToReact(mapModelsToProps, options)(MyComponent);
 
@@ -75,6 +79,25 @@ const modelsMap = {
 ReactDOM.render(
   // Pass the modelsMap to the HoC via the models prop.
   <MyComponentConnected models={modelsMap} />,
+  document.getElementById('app')
+);
+```
+
+### BackboneProvider
+
+Alternatively you might have a tree of connected Components. We shouldn't pass that `modelsMap` object from one component to another. Instead we can take inspiration from [react-redux's Provider component](https://github.com/reactjs/react-redux/blob/master/docs/api.md#provider-store).
+
+```javascript
+const { BackboneProvider } = require('connect-backbone-to-react');
+
+ReactDOM.render(
+  // Pass the modelsMap to the BackboneProvider via the models prop.
+  // It will then get shared to every child connected component via React's context.
+  <BackboneProvider models={modelsMap}>
+    <MyComponentConnected>
+      <MyComponentConnected />
+    </MyComponentConnected>
+  </BackboneProvider>,
   document.getElementById('app')
 );
 ```
