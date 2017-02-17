@@ -14,7 +14,7 @@ describe('connectBackboneToReact', function() {
   let userModel;
   let userCollection;
   let modelsMap;
-  let modelsToProps;
+  let mapModelsToProps;
 
   class TestComponent extends Component {
     render() {
@@ -66,7 +66,7 @@ describe('connectBackboneToReact', function() {
       coll: userCollection,
     };
 
-    modelsToProps = function({ user, coll }) {
+    mapModelsToProps = function({ user, coll }) {
       return {
         name: user.get('name'),
         age: user.get('age'),
@@ -86,10 +86,10 @@ describe('connectBackboneToReact', function() {
   describe('when mounted', function() {
     let renderSpy;
     beforeEach(function() {
-      const ConnectedTest = connectBackboneToReact(modelsMap, modelsToProps)(TestComponent);
+      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
       renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
 
-      wrapper = mount(<ConnectedTest />);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
 
       // Don't track initial render.
@@ -151,19 +151,22 @@ describe('connectBackboneToReact', function() {
         assert.equal(getEventHandlersSetCount(model, wrapperInstance), 0);
       });
     });
+
+    it('does not pass through the models prop to the wrapped component', function() {
+      assert.equal(stub.props().models, undefined);
+    });
   });
 
   describe('when mounted with debounce set to true', function() {
     let renderSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
-        modelsMap,
-        modelsToProps,
+        mapModelsToProps,
         { debounce: true }
       )(TestComponent);
       renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
 
-      wrapper = mount(<ConnectedTest />);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
 
       // Don't track initial render.
@@ -206,8 +209,7 @@ describe('connectBackboneToReact', function() {
     let wrapperInstance;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
-        modelsMap,
-        modelsToProps,
+        mapModelsToProps,
         {
           events: {
             user: ['change:name'],
@@ -217,7 +219,7 @@ describe('connectBackboneToReact', function() {
       )(TestComponent);
       renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
 
-      wrapper = mount(<ConnectedTest />);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
       wrapperInstance = wrapper.instance();
 
@@ -278,8 +280,8 @@ describe('connectBackboneToReact', function() {
 
     beforeEach(function() {
       // eslint-disable-next-line no-unused-vars
-      const ConnectedTest = connectBackboneToReact(modelsMap, modelsToProps)(TestComponent);
-      wrapper = mount(<ConnectedTest {...connectedProps} />);
+      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+      wrapper = mount(<ConnectedTest models={modelsMap} {...connectedProps} />);
       stub = wrapper.find(TestComponent);
     });
 
@@ -292,7 +294,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.props().peeled, true);
     });
 
-    it('overwrites modelsToProps', function() {
+    it('overwrites mapModelsToProps', function() {
       assert.equal(stub.props().age, 1);
     });
   });
@@ -300,12 +302,10 @@ describe('connectBackboneToReact', function() {
   describe('when only given modelsMap object', function() {
     let renderSpy;
     beforeEach(function() {
-      const ConnectedTest = connectBackboneToReact(
-        modelsMap
-      )(TestComponent);
+      const ConnectedTest = connectBackboneToReact()(TestComponent);
       renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
 
-      wrapper = mount(<ConnectedTest />);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
 
       // Don't track initial render.
@@ -316,7 +316,7 @@ describe('connectBackboneToReact', function() {
       wrapper.unmount();
     });
 
-    it('uses default modelsToProps function', function() {
+    it('uses default mapModelsToProps function', function() {
       assert.equal(stub.props().user.name, 'Harry');
       assert.equal(stub.props().user.age, 25);
       assert.equal(stub.props().user.hungry, true);
@@ -355,7 +355,7 @@ describe('connectBackboneToReact', function() {
     let wrapperInstance;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
-        modelsMap,
+        null,
         {
           events: {
             user: ['change:name'],
@@ -365,7 +365,7 @@ describe('connectBackboneToReact', function() {
       )(TestComponent);
       renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
 
-      wrapper = mount(<ConnectedTest />);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
 
       wrapperInstance = wrapper.instance();
@@ -378,7 +378,7 @@ describe('connectBackboneToReact', function() {
       wrapper.unmount();
     });
 
-    it('uses default modelsToProps function', function() {
+    it('uses default mapModelsToProps function', function() {
       assert.equal(stub.props().user.name, 'Harry');
       assert.equal(stub.props().user.age, 25);
       assert.equal(stub.props().user.hungry, true);

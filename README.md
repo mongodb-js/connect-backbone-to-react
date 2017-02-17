@@ -25,46 +25,48 @@ class MyComponent extends React.Component {
   }
 }
 
-const WrappedComponent = connectBackboneToReact(
-  // Map your Backbone Model and Collections to names that will be provided to
-  // connectBackboneToReact's mapModelsToProps function.
-  {
-    user: userModel,
-    allUsers: userCollection,
-  },
+// Maps Models to properties to give to the React Component. Optional.
+// Default behavior is to call `.toJSON()` on every Model and Collection.
+const mapModelsToProps = (models) => {
+  const { user, allUsers } = models;
 
-  // Maps Models to properties to give to the React Component. Optional.
-  // Default behavior is to call `.toJSON()` on every Model and Collection.
-  function mapModelsToProps(models) {
-    const { user, allUsers } = models;
-
-    // Everything returned from this function will be given as a prop to your Component.
-    return {
-      doesUserLaugh: user.get('laughs'),
-      users: allUsers.toJSON(),
-      setUserLaughs(newVal) {
-        user.set('laughs', newVal);
-      },
-    };
-  }
-
-  // Options.
-  {
-    // Should our event handler function be wrapped in a debounce function
-    // to prevent many re-renders.
-    debounce: false, // or `true`, or a number that will be used in the debounce function.
-
-    // Define what events you want to listen to on your Backbone Model or Collection
-    // that will cause your React Component to re-render.
-    // By default it's ['all'] for every Model and Collection given.
-    events: {
-      user: ['change:name', 'change:laughs'], // You can disable listening to events by passing in `false`.
+  // Everything returned from this function will be given as a prop to your Component.
+  return {
+    doesUserLaugh: user.get('laughs'),
+    users: allUsers.toJSON(),
+    setUserLaughs(newVal) {
+      user.set('laughs', newVal);
     },
-  }
-)(MyComponent);
+  };
+};
+
+// Options.
+const options = {
+  // Should our event handler function be wrapped in a debounce function
+  // to prevent many re-renders.
+  debounce: false, // or `true`, or a number that will be used in the debounce function.
+
+  // Define what events you want to listen to on your Backbone Model or Collection
+  // that will cause your React Component to re-render.
+  // By default it's ['all'] for every Model and Collection given.
+  events: {
+    user: ['change:name', 'change:laughs'], // You can disable listening to events by passing in `false`.
+  },
+};
+
+// Create our Connected HoC.
+const MyComponentConnected = connectBackboneToReact(mapModelsToProps, options)(MyComponent);
+
+// Map your Backbone Model and Collections to names that will be provided to
+// your mapModelsToProps function.
+const modelsMap = {
+  user: userModel,
+  allUsers: userCollection,
+},
 
 ReactDOM.render(
-  <WrappedComponent />,
+  // Pass the modelsMap to the HoC via the models prop.
+  <MyComponentConnected models={modelsMap} />,
   document.getElementById('app')
 );
 ```
