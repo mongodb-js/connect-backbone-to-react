@@ -5,7 +5,7 @@ const _ = require('lodash');
 const React = require('react');
 const { Component } = React;
 const { Model, Collection } = require('backbone');
-const connectBackboneToReact = require('../');
+const connectBackboneToReact = require('../lib/connect-backbone-to-react');
 
 describe('connectBackboneToReact', function() {
   let sandbox;
