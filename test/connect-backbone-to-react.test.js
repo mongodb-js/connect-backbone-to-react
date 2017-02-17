@@ -11,10 +11,21 @@ describe('connectBackboneToReact', function() {
   let sandbox;
   let wrapper;
   let stub;
-  let userModel;
-  let userCollection;
   let modelsMap;
   let mapModelsToProps;
+
+  let userModel;
+  const UserModel = Model.extend({
+  });
+
+  let userCollection;
+  const UserCollection = Collection.extend({
+    model: UserModel,
+  });
+
+  let settingsModel;
+  const SettingsModel = Model.extend({
+  });
 
   class TestComponent extends Component {
     render() {
@@ -53,13 +64,13 @@ describe('connectBackboneToReact', function() {
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
-    userModel = new Model({
+    userModel = new UserModel({
       name: 'Harry',
       age: 25,
       hungry: true,
     });
 
-    userCollection = new Collection([userModel]);
+    userCollection = new UserCollection([userModel]);
 
     modelsMap = {
       user: userModel,
@@ -399,6 +410,76 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.props().user.name, 'Banana');
 
       assert.equal(renderSpy.callCount, 1);
+    });
+  });
+
+  describe('when modelTypes are defined on the options object', function() {
+    describe('and the model given is not an instance of required modelType', function() {
+      let renderSpy;
+      let errObj;
+
+      beforeEach(function() {
+        const ConnectedTest = connectBackboneToReact(
+          null,
+          {
+            modelTypes: {
+              user: UserModel,
+            },
+          }
+        )(TestComponent);
+        renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+
+        settingsModel = new SettingsModel();
+        modelsMap = {
+          user: settingsModel,
+        };
+
+        try {
+          wrapper = mount(<ConnectedTest models={modelsMap} />);
+        } catch (e) {
+          errObj = e;
+        }
+      });
+
+      it('does not render', function() {
+        assert.equal(renderSpy.callCount, 0);
+      });
+
+      it('throws an error', function() {
+        assert(errObj);
+        assert.equal(errObj.message, '"user" model found on modelsMap does not match type required.');
+      });
+    });
+
+    describe('and the modelType required is a parent class', function() {
+      let renderSpy;
+      let errObj;
+
+      beforeEach(function() {
+        const ConnectedTest = connectBackboneToReact(
+          null,
+          {
+            modelTypes: {
+              user: Model,
+            },
+          }
+        )(TestComponent);
+        renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+
+        try {
+          wrapper = mount(<ConnectedTest models={modelsMap} />);
+        } catch (e) {
+          errObj = e;
+        }
+      });
+
+      it('renders', function() {
+        assert.equal(renderSpy.callCount, 1);
+      });
+
+      it('does not throw an error', function() {
+        assert(errObj == null);
+      });
     });
   });
 });

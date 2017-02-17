@@ -52,6 +52,14 @@ const options = {
   events: {
     user: ['change:name', 'change:laughs'], // You can disable listening to events by passing in `false`.
   },
+
+  // Define what modelTypes you expect to be contained on your `modelsMap` object.
+  // Useful for validating that you'll be given what model type you expect.
+  // Uses instanceof, and throws an error if instanceof returns false.
+  // By default no modelTypes are defined.
+  modelTypes: {
+    user: Backbone.Model,
+  },
 };
 
 // Create our Connected HoC.
