@@ -478,7 +478,7 @@ describe('connectBackboneToReact', function() {
       });
 
       it('does not throw an error', function() {
-        assert(errObj == null);
+        assert(errObj === undefined);
       });
     });
   });
