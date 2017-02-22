@@ -7,8 +7,9 @@
 ### connectBackboneToReact
 
 ```javascript
-const userModel = new Backbone.Model({ name: 'Harry', laughs: true });
-const userCollection = new Backbone.Collection([userModel]);
+const UserModel = Backbone.Model.extend();
+const userInstance = new UserModel({ name: 'Harry', laughs: true });
+const userCollection = new Backbone.Collection([userInstance]);
 
 class MyComponent extends React.Component {
   render() {
@@ -60,24 +61,24 @@ const options = {
   // Uses instanceof, and throws an error if instanceof returns false.
   // By default no modelTypes are defined.
   modelTypes: {
-    user: Backbone.Model,
+    user: UserModel,
   },
 };
 
 const { connectBackboneToReact } = require('connect-backbone-to-react');
 
-// Create our Connected HoC.
+// Create our Connected Higher order Component (HOC).
 const MyComponentConnected = connectBackboneToReact(mapModelsToProps, options)(MyComponent);
 
 // Map your Backbone Model and Collections to names that will be provided to
 // your mapModelsToProps function.
 const modelsMap = {
-  user: userModel,
+  user: userInstance,
   allUsers: userCollection,
 },
 
 ReactDOM.render(
-  // Pass the modelsMap to the HoC via the models prop.
+  // Pass the modelsMap to the HOC via the models prop.
   <MyComponentConnected models={modelsMap} />,
   document.getElementById('app')
 );
@@ -89,6 +90,11 @@ Alternatively you might have a tree of connected Components. We shouldn't pass t
 
 ```javascript
 const { BackboneProvider } = require('connect-backbone-to-react');
+
+const modelsMap = {
+  user: userInstance,
+  allUsers: userCollection,
+},
 
 ReactDOM.render(
   // Pass the modelsMap to the BackboneProvider via the models prop.
