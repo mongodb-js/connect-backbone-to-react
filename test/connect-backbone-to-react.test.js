@@ -1,7 +1,6 @@
 const assert = require('assert');
 const { mount } = require('enzyme');
 const sinon = require('sinon');
-const _ = require('lodash');
 const React = require('react');
 const { Component } = React;
 const { Model, Collection } = require('backbone');
@@ -15,8 +14,7 @@ describe('connectBackboneToReact', function() {
   let mapModelsToProps;
 
   let userModel;
-  const UserModel = Model.extend({
-  });
+  const UserModel = Model.extend({});
 
   let userCollection;
   const UserCollection = Collection.extend({
@@ -24,8 +22,12 @@ describe('connectBackboneToReact', function() {
   });
 
   let settingsModel;
-  const SettingsModel = Model.extend({
-  });
+  const SettingsModel = Model.extend({});
+
+  let userOnSpy;
+  let userOffSpy;
+  let collOnSpy;
+  let collOffSpy;
 
   class TestComponent extends Component {
     render() {
@@ -45,22 +47,6 @@ describe('connectBackboneToReact', function() {
     }
   }
 
-  function getModelEventHandlerNames(model, instance) {
-    return _.reduce(model._events, (acc, events, eventName) => {
-      const eventListeners = events.filter(e => e.context === instance);
-
-      if (eventListeners.length > 0) {
-        acc.push(eventName);
-      }
-
-      return acc;
-    }, []);
-  }
-
-  function getEventHandlersSetCount(model, instance) {
-    return getModelEventHandlerNames(model, instance).length;
-  }
-
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
@@ -71,6 +57,11 @@ describe('connectBackboneToReact', function() {
     });
 
     userCollection = new UserCollection([userModel]);
+
+    userOnSpy = sandbox.spy(userModel, 'on');
+    collOnSpy = sandbox.spy(userCollection, 'on');
+    userOffSpy = sandbox.spy(userModel, 'off');
+    collOffSpy = sandbox.spy(userCollection, 'off');
 
     modelsMap = {
       user: userModel,
@@ -137,6 +128,7 @@ describe('connectBackboneToReact', function() {
     it('updates properties when model and collections change', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      assert.equal(wrapper.find('.name').text(), 'Banana');
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, newName);
 
@@ -144,23 +136,21 @@ describe('connectBackboneToReact', function() {
     });
 
     it('creates listeners for every model', function() {
-      const wrapperInstance = wrapper.instance();
-      Object.keys(modelsMap).forEach(modelKey => {
-        const model = modelsMap[modelKey];
+      assert(userOnSpy.calledOnce);
+      assert.equal(userOnSpy.firstCall.args[0], ['all']);
 
-        assert.equal(getEventHandlersSetCount(model, wrapperInstance), 1);
-      });
+      assert(collOnSpy.calledOnce);
+      assert.equal(collOnSpy.firstCall.args[0], ['all']);
     });
 
     it('removes listeners when unmounting', function() {
-      const wrapperInstance = wrapper.instance();
       wrapper.unmount();
 
-      Object.keys(modelsMap).forEach(modelKey => {
-        const model = modelsMap[modelKey];
+      assert(userOffSpy.calledOnce);
+      assert.equal(userOffSpy.firstCall.args[0], ['all']);
 
-        assert.equal(getEventHandlersSetCount(model, wrapperInstance), 0);
-      });
+      assert(collOffSpy.calledOnce);
+      assert.equal(collOffSpy.firstCall.args[0], ['all']);
     });
 
     it('does not pass through the models prop to the wrapped component', function() {
@@ -217,7 +207,6 @@ describe('connectBackboneToReact', function() {
 
   describe('when mounted with custom event names', function() {
     let renderSpy;
-    let wrapperInstance;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
@@ -232,7 +221,6 @@ describe('connectBackboneToReact', function() {
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-      wrapperInstance = wrapper.instance();
 
       // Don't track initial render.
       renderSpy.reset();
@@ -243,12 +231,12 @@ describe('connectBackboneToReact', function() {
     });
 
     it('sets one event handler on the userModel', function() {
-      assert.equal(getEventHandlersSetCount(userModel, wrapperInstance), 1);
-      assert.deepEqual(getModelEventHandlerNames(userModel, wrapperInstance), ['change:name']);
+      assert(userOnSpy.calledOnce);
+      assert.equal(userOnSpy.firstCall.args[0], ['change:name']);
     });
 
     it('sets 0 event handlers on the userCollection', function() {
-      assert.equal(getEventHandlersSetCount(userCollection, wrapperInstance), 0);
+      assert.equal(collOnSpy.called, false);
     });
 
     it('updates properties when model\'s name changes', function() {
@@ -279,6 +267,34 @@ describe('connectBackboneToReact', function() {
       const newAge = 99;
       userModel.set('age', newAge);
       assert.equal(renderSpy.callCount, 0);
+    });
+  });
+
+  describe('when custom event options disable event tracking', function() {
+    beforeEach(function() {
+      const ConnectedTest = connectBackboneToReact( // eslint-disable-line no-unused-vars
+        mapModelsToProps,
+        {
+          events: {
+            user: [],
+            coll: false,
+          },
+        }
+      )(TestComponent);
+
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('sets 0 event handlers on the userModel', function() {
+      assert.equal(userOnSpy.called, false);
+    });
+
+    it('sets 0 event handlers on the userCollection', function() {
+      assert.equal(collOnSpy.called, false);
     });
   });
 
@@ -333,22 +349,12 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.props().user.hungry, true);
     });
 
-    it('creates default event listeners for every model', function() {
-      const wrapperInstance = wrapper.instance();
-      Object.keys(modelsMap).forEach(modelKey => {
-        const model = modelsMap[modelKey];
+    it('creates default event listeners of "all" for every model', function() {
+      assert(userOnSpy.calledOnce);
+      assert.equal(userOnSpy.firstCall.args[0], ['all']);
 
-        assert.equal(getEventHandlersSetCount(model, wrapperInstance), 1);
-      });
-    });
-
-    it('creates default event handlers of "all"', function() {
-      const wrapperInstance = wrapper.instance();
-      Object.keys(modelsMap).forEach(modelKey => {
-        const model = modelsMap[modelKey];
-
-        assert.deepEqual(getModelEventHandlerNames(model, wrapperInstance), ['all']);
-      });
+      assert(collOnSpy.calledOnce);
+      assert.equal(collOnSpy.firstCall.args[0], ['all']);
     });
 
     it('re-renders props when model changes', function() {
@@ -361,9 +367,8 @@ describe('connectBackboneToReact', function() {
     });
   });
 
-  describe('when given modelsMap and options object', function() {
+  describe('when given modelsMap and event options', function() {
     let renderSpy;
-    let wrapperInstance;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         null,
@@ -378,8 +383,6 @@ describe('connectBackboneToReact', function() {
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      wrapperInstance = wrapper.instance();
 
       // Don't track initial render.
       renderSpy.reset();
@@ -396,11 +399,12 @@ describe('connectBackboneToReact', function() {
     });
 
     it('sets one event handler on the userModel', function() {
-      assert.deepEqual(getModelEventHandlerNames(userModel, wrapperInstance), ['change:name']);
+      assert(userOnSpy.calledOnce);
+      assert.equal(userOnSpy.firstCall.args[0], ['change:name']);
     });
 
     it('sets 0 event handlers on the userCollection', function() {
-      assert.equal(getEventHandlersSetCount(userCollection, wrapperInstance), 0);
+      assert.equal(collOnSpy.called, false);
     });
 
     it('re-renders props when model changes', function() {

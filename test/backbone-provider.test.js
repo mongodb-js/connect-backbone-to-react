@@ -89,6 +89,10 @@ describe('BackboneProvider', function() {
       assert.deepEqual(componentStub.props().coll, userCollection.toJSON());
     });
 
+    it('two instances of Harry text are rendered', function() {
+      assert.equal(wrapper.find('.name').length, 2);
+    });
+
     it('every connected Component is given the same "modelsMap"', function() {
       assert(
         wrapper.find('.name').everyWhere(n => n.text() === 'Harry')
