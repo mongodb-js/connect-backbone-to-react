@@ -183,6 +183,7 @@ describe('connectBackboneToReact', function() {
       userModel.set('name', newName);
 
       setTimeout(() => {
+        assert.equal(wrapper.find('.name').text(), 'Banana');
         assert.equal(userModel.get('name'), newName);
         assert.equal(stub.props().name, newName);
 
