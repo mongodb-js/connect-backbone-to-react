@@ -25,7 +25,6 @@
   "dependencies": {
     "hoist-non-react-statics": "^1.2.0",
     "lodash.debounce": "^4.0.8",
-    "lodash.isarray": "^4.0.0",
     "react": "^15.4.2"
   },
   "devDependencies": {
@@ -37,7 +36,6 @@
     "enzyme": "^2.7.1",
     "eslint-config-mongodb-js": "^2.2.0",
     "jsdom": "^9.11.0",
-    "lodash": "^4.17.4",
     "mocha": "^3.2.0",
     "mongodb-js-fmt": "^0.0.3",
     "mongodb-js-precommit": "^0.2.8",

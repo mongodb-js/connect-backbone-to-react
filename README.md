@@ -53,7 +53,8 @@ const options = {
   // that will cause your React Component to re-render.
   // By default it's ['all'] for every Model and Collection given.
   events: {
-    user: ['change:name', 'change:laughs'], // You can disable listening to events by passing in `false`.
+    user: ['change:name', 'change:laughs'],
+    // You can disable listening to events by passing in `false` or an empty array.
   },
 
   // Define what modelTypes you expect to be contained on your `modelsMap` object.
