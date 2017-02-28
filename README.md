@@ -8,8 +8,10 @@
 
 ```javascript
 const UserModel = Backbone.Model.extend();
+const UserCollection = Backbone.Collection.extend({ model: UserModel });
+
 const userInstance = new UserModel({ name: 'Harry', laughs: true });
-const userCollection = new Backbone.Collection([userInstance]);
+const userCollection = new UserCollection([userInstance]);
 
 class MyComponent extends React.Component {
   render() {
@@ -63,6 +65,7 @@ const options = {
   // By default no modelTypes are defined.
   modelTypes: {
     user: UserModel,
+    allUsers: UserCollection,
   },
 };
 
@@ -70,7 +73,11 @@ const { connectBackboneToReact } = require('connect-backbone-to-react');
 
 // Create our Connected Higher order Component (HOC).
 const MyComponentConnected = connectBackboneToReact(mapModelsToProps, options)(MyComponent);
+```
 
+Now that you've created your HOC you can use it!
+
+```javascript
 // Map your Backbone Model and Collections to names that will be provided to
 // your mapModelsToProps function.
 const modelsMap = {
