@@ -487,4 +487,46 @@ describe('connectBackboneToReact', function() {
       });
     });
   });
+
+  describe('when unmounted in an event listener and subscribed to "all" event', function() {
+    // To add more color, "all" event handlers are triggered after individual event handlers.
+    // That is to say, if you trigger "foo" the sequence of event handlers called is:
+    // "foo" -> all event handlers (which can include additional triggers) -> "all" -> event handlers.
+    // When you .off('all') within an event handler Backbone reassigns the "all" array of handlers
+    // such that when you get to triggering the "all" event handlers that array has not been updated.
+    // This is the line that reassigns that array: https://github.com/jashkenas/backbone/blob/bd50e2e4a4af5c09bc490185aab215794d42258b/backbone.js#L296
+    // So that when you get here https://github.com/jashkenas/backbone/blob/bd50e2e4a4af5c09bc490185aab215794d42258b/backbone.js#L357
+    // the "allEvents" value is stale.
+
+    const arbitraryEvent = 'arbitraryEvent';
+    let setStateSpy;
+
+    beforeEach(function() {
+      // eslint-disable-next-line no-unused-vars
+      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+
+      // Subscribe to an arbitrary event.
+      userModel.on(arbitraryEvent, function() {
+        // When called it unmounts are component.
+        wrapper.unmount();
+
+        // But because we're subscribed to the "all" event it will still trigger that handler,
+        // calling setState when it shouldn't.
+      });
+
+      // Trigger the event.
+      userModel.trigger(arbitraryEvent);
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('does not call setState', function() {
+      assert.equal(setStateSpy.called, false);
+    });
+  });
 });
