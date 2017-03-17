@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.0.0...v1.0.1) (2017-03-17)
+
+
+### Bug Fixes
+
+* Don't call createNewProps if component has been unmounted. ([1a83663](https://github.com/mongodb-js/connect-backbone-to-react/commit/1a83663))
+* Rename Connect to ConnectBackboneToReact ([f2899c6](https://github.com/mongodb-js/connect-backbone-to-react/commit/f2899c6)), closes [#4](https://github.com/mongodb-js/connect-backbone-to-react/issues/4)
+* Spy on setState for most test assertions. ([f3253d2](https://github.com/mongodb-js/connect-backbone-to-react/commit/f3253d2))
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-03-01)
 
