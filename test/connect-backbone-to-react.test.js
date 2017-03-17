@@ -86,16 +86,13 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when mounted', function() {
-    let renderSpy;
+    let setStateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
-      renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      // Don't track initial render.
-      renderSpy.reset();
     });
 
     afterEach(function() {
@@ -122,7 +119,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, newName);
 
-      assert.equal(renderSpy.callCount, 4);
+      assert.equal(setStateSpy.callCount, 4);
     });
 
     it('updates properties when model and collections change', function() {
@@ -132,7 +129,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, newName);
 
-      assert.equal(renderSpy.callCount, 4);
+      assert.equal(setStateSpy.callCount, 4);
     });
 
     it('creates listeners for every model', function() {
@@ -159,19 +156,16 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when mounted with debounce set to true', function() {
-    let renderSpy;
+    let setStateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
         { debounce: true }
       )(TestComponent);
-      renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      // Don't track initial render.
-      renderSpy.reset();
     });
 
     afterEach(function() {
@@ -187,7 +181,7 @@ describe('connectBackboneToReact', function() {
         assert.equal(userModel.get('name'), newName);
         assert.equal(stub.props().name, newName);
 
-        assert.equal(renderSpy.callCount, 1);
+        assert.equal(setStateSpy.callCount, 1);
 
         done();
       }, 0);
@@ -202,12 +196,12 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, 'Harry');
 
-      assert.equal(renderSpy.callCount, 0);
+      assert.equal(setStateSpy.callCount, 0);
     });
   });
 
   describe('when mounted with custom event names', function() {
-    let renderSpy;
+    let setStateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
@@ -218,13 +212,10 @@ describe('connectBackboneToReact', function() {
           },
         }
       )(TestComponent);
-      renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      // Don't track initial render.
-      renderSpy.reset();
     });
 
     afterEach(function() {
@@ -251,7 +242,7 @@ describe('connectBackboneToReact', function() {
     it('rerenders when tracked property changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
-      assert.equal(renderSpy.callCount, 1);
+      assert.equal(setStateSpy.callCount, 1);
     });
 
     it('does not update properties when non tracked property changes', function() {
@@ -261,13 +252,13 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('age'), newAge);
       assert.equal(stub.props().age, 25);
 
-      assert.equal(renderSpy.callCount, 0);
+      assert.equal(setStateSpy.callCount, 0);
     });
 
     it('does not rerender when non tracked property changes', function() {
       const newAge = 99;
       userModel.set('age', newAge);
-      assert.equal(renderSpy.callCount, 0);
+      assert.equal(setStateSpy.callCount, 0);
     });
   });
 
@@ -328,16 +319,13 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when only given modelsMap object', function() {
-    let renderSpy;
+    let setStateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact()(TestComponent);
-      renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      // Don't track initial render.
-      renderSpy.reset();
     });
 
     afterEach(function() {
@@ -364,12 +352,12 @@ describe('connectBackboneToReact', function() {
 
       assert.equal(stub.props().user.name, 'Banana');
 
-      assert.equal(renderSpy.callCount, 4);
+      assert.equal(setStateSpy.callCount, 4);
     });
   });
 
   describe('when given modelsMap and event options', function() {
-    let renderSpy;
+    let setStateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         null,
@@ -380,13 +368,10 @@ describe('connectBackboneToReact', function() {
           },
         }
       )(TestComponent);
-      renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
-
-      // Don't track initial render.
-      renderSpy.reset();
     });
 
     afterEach(function() {
@@ -414,13 +399,13 @@ describe('connectBackboneToReact', function() {
 
       assert.equal(stub.props().user.name, 'Banana');
 
-      assert.equal(renderSpy.callCount, 1);
+      assert.equal(setStateSpy.callCount, 1);
     });
   });
 
   describe('when modelTypes are defined on the options object', function() {
     describe('and the model given is not an instance of required modelType', function() {
-      let renderSpy;
+      let setStateSpy;
       let errObj;
 
       beforeEach(function() {
@@ -432,7 +417,7 @@ describe('connectBackboneToReact', function() {
             },
           }
         )(TestComponent);
-        renderSpy = sandbox.spy(ConnectedTest.prototype, 'render');
+        setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
         settingsModel = new SettingsModel();
         modelsMap = {
@@ -447,7 +432,7 @@ describe('connectBackboneToReact', function() {
       });
 
       it('does not render', function() {
-        assert.equal(renderSpy.callCount, 0);
+        assert.equal(setStateSpy.callCount, 0);
       });
 
       it('throws an error', function() {
@@ -510,7 +495,7 @@ describe('connectBackboneToReact', function() {
 
       // Subscribe to an arbitrary event.
       userModel.on(arbitraryEvent, function() {
-        // When called it unmounts are component.
+        // When called it unmounts an component.
         wrapper.unmount();
 
         // But because we're subscribed to the "all" event it will still trigger that handler,
@@ -519,10 +504,6 @@ describe('connectBackboneToReact', function() {
 
       // Trigger the event.
       userModel.trigger(arbitraryEvent);
-    });
-
-    afterEach(function() {
-      wrapper.unmount();
     });
 
     it('does not call setState', function() {
