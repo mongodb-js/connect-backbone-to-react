@@ -25,7 +25,8 @@
   ],
   "dependencies": {
     "hoist-non-react-statics": "^1.2.0",
-    "lodash.debounce": "^4.0.8"
+    "lodash.debounce": "^4.0.8",
+    "prop-types": "^15.5.8"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0-0 || ^16.0.0-0"
