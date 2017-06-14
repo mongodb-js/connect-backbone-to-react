@@ -473,6 +473,49 @@ describe('connectBackboneToReact', function() {
     });
   });
 
+  describe('when passed props change', function() {
+    let setStateSpy;
+    let newName;
+    let newAge;
+
+    beforeEach(function() {
+      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+      stub = wrapper.find(TestComponent);
+
+      newName = 'Robert';
+      newAge = '30';
+
+      const newUserModel = new UserModel({
+        name: newName,
+        age: newAge,
+        hungry: false,
+      });
+      const newModelsMap = {
+        user: newUserModel,
+        coll: userCollection,
+      };
+
+      wrapper.setProps({ models: newModelsMap });
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('calls setState once', function() {
+      assert.equal(setStateSpy.calledOnce, true);
+    });
+
+    it('renders the new props', function() {
+      assert.equal(stub.find('.name').text(), newName);
+      assert.equal(stub.find('.age').text(), newAge);
+      assert.equal(stub.find('.hungry').text(), 'not hungry');
+    });
+  });
+
   describe('when unmounted in an event listener and subscribed to "all" event', function() {
     // To add more color, "all" event handlers are triggered after individual event handlers.
     // That is to say, if you trigger "foo" the sequence of event handlers called is:
