@@ -477,6 +477,7 @@ describe('connectBackboneToReact', function() {
     let setStateSpy;
     let newName;
     let newAge;
+    let newUserModel;
 
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
@@ -488,7 +489,7 @@ describe('connectBackboneToReact', function() {
       newName = 'Robert';
       newAge = '30';
 
-      const newUserModel = new UserModel({
+      newUserModel = new UserModel({
         name: newName,
         age: newAge,
         hungry: false,
@@ -513,6 +514,13 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.find('.name').text(), newName);
       assert.equal(stub.find('.age').text(), newAge);
       assert.equal(stub.find('.hungry').text(), 'not hungry');
+    });
+
+    it('listen for updates', function() {
+      newName = 'Bob';
+      newUserModel.set('name', newName);
+
+      assert.equal(stub.find('.name').text(), newName);
     });
   });
 
