@@ -98,5 +98,12 @@ describe('BackboneProvider', function() {
         wrapper.find('.name').everyWhere(n => n.text() === 'Harry')
       );
     });
+
+    it('should handle updates to passed props', function() {
+      const model = new Model({ name: 'Jill' });
+      wrapper.setProps({ models: { user: model }});
+
+      wrapper.find('.name').everyWhere(n => n.text() === 'Jill');
+    });
   });
 });
