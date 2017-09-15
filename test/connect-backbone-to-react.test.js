@@ -200,6 +200,24 @@ describe('connectBackboneToReact', function() {
     });
   });
 
+  describe('when mounted with an undefined model', function() {
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    function mapEmptyModel({ user }) {
+      return { user };
+    }
+
+    it('should mount and unmount the component successfully', function() {
+      const ConnectedTest = connectBackboneToReact(mapEmptyModel)(TestComponent);
+      const setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      wrapper = mount(<ConnectedTest models={{ user: null }} />);
+      assert(wrapper.find('.name'));
+      assert.equal(setStateSpy.callCount, 0);
+    });
+  });
+
   describe('when mounted with custom event names', function() {
     let setStateSpy;
     beforeEach(function() {
