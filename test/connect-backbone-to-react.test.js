@@ -205,16 +205,11 @@ describe('connectBackboneToReact', function() {
       wrapper.unmount();
     });
 
-    function mapEmptyModel({ user }) {
-      return { user };
-    }
-
-    it('should mount and unmount the component successfully', function() {
-      const ConnectedTest = connectBackboneToReact(mapEmptyModel)(TestComponent);
-      const setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
-      wrapper = mount(<ConnectedTest models={{ user: null }} />);
-      assert(wrapper.find('.name'));
-      assert.equal(setStateSpy.callCount, 0);
+    it('the default should mount and unmount the component successfully', function() {
+      const ConnectedTest = connectBackboneToReact()(TestComponent);
+      const eventListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
+      wrapper = mount(<ConnectedTest models={{user: null}} />);
+      assert.equal(eventListenerSpy.callCount, 0);
     });
   });
 
