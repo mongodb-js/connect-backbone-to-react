@@ -486,6 +486,63 @@ describe('connectBackboneToReact', function() {
     });
   });
 
+  describe('when using props in mapModelsToProps', function() {
+    function mapWithProps({ coll }, { name }) {
+      if (!name) return {};
+      const user = coll.findWhere({ name });
+      return {
+        name: user.get('name'),
+        age: user.get('age'),
+        hungry: user.get('hungry'),
+      };
+    }
+
+    let a;
+    let b;
+    let setStateSpy;
+    beforeEach(function() {
+      let ConnectedTest = connectBackboneToReact(mapWithProps)(TestComponent);
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      a = new UserModel({
+        name: 'A',
+        age: '10',
+        hungry: false,
+      });
+      b = new UserModel({
+        name: 'B',
+        age: '20',
+        hungry: false,
+      });
+
+      const models = {
+        coll: new UserCollection([a, b]),
+      };
+
+      wrapper = mount(<ConnectedTest models={models} name={'A'} />);
+      stub = wrapper.find(TestComponent);
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('retrieves the correct model based on props', function() {
+      assert.equal(stub.find('.name').text(), a.get('name'));
+      assert.equal(stub.find('.age').text(), a.get('age'));
+
+      // Using props should not increase the number of times setState is called.
+      assert.equal(setStateSpy.calledOnce, false);
+    });
+
+    it('update the models based on new props', function() {
+      wrapper.setProps({ name: 'B'});
+      b.set('hungry', true);
+
+      assert.equal(stub.find('.name').text(), b.get('name'));
+      assert.equal(stub.find('.age').text(), b.get('age'));
+    });
+  });
+
   describe('when passed props change', function() {
     let setStateSpy;
     let newName;
