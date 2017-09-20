@@ -11,7 +11,8 @@ const UserModel = Backbone.Model.extend();
 const UserCollection = Backbone.Collection.extend({ model: UserModel });
 
 const userInstance = new UserModel({ name: 'Harry', laughs: true });
-const userCollection = new UserCollection([userInstance]);
+const anotherUserInstance = new UserModel({ name: 'Samantha', laughs: false });
+const userCollection = new UserCollection([userInstance, anotherUserInstance]);
 
 class MyComponent extends React.Component {
   render() {
@@ -32,13 +33,17 @@ class MyComponent extends React.Component {
 
 // Maps Models to properties to give to the React Component. Optional.
 // Default behavior is to call `.toJSON()` on every Model and Collection.
-const mapModelsToProps = (models) => {
+// Second argument are props given to the React Component.
+const mapModelsToProps = (models, props) => {
   const { user, allUsers } = models;
+  const { showOnlyLaughingUsers } = props;
 
   // Everything returned from this function will be given as a prop to your Component.
   return {
     doesUserLaugh: user.get('laughs'),
-    users: allUsers.toJSON(),
+    users: showOnlyLaughingUsers ?
+      allUsers.toJSON().filter(user => user.get('laughs') === true)
+      allUsers.toJSON(),
     setUserLaughs(newVal) {
       user.set('laughs', newVal);
     },
@@ -87,7 +92,7 @@ const modelsMap = {
 
 ReactDOM.render(
   // Pass the modelsMap to the HOC via the models prop.
-  <MyComponentConnected models={modelsMap} />,
+  <MyComponentConnected models={modelsMap} showOnlyLaughingUsers />,
   document.getElementById('app')
 );
 ```
