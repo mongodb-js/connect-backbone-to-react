@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.0...v1.4.0) (2017-09-20)
+
+
+### Features
+
+* Add props as second arg to mapModelsToProps ([d971b884e](https://github.com/mongodb-js/connect-backbone-to-react/commit/d971b884e))
+
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.1...v1.3.2) (2017-09-18)
 
