@@ -103,7 +103,7 @@ describe('BackboneProvider', function() {
       const model = new Model({ name: 'Jill' });
       wrapper.setProps({ models: { user: model }});
 
-      wrapper.find('.name').everyWhere(n => n.text() === 'Jill');
+      assert(wrapper.find('.name').everyWhere(n => n.text() === 'Jill'));
     });
   });
 });
