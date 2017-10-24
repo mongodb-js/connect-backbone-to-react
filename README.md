@@ -18,14 +18,18 @@ class MyComponent extends React.Component {
   render() {
     return (
       <div>
-        My user laughs: {this.props.doesUserLaugh}
-
+        <p>
+          My user laughs: {this.props.doesUserLaugh ? "yes" : "no"}
+        </p>
+        <button onClick={() => this.props.setUserLaughs(!this.props.doesUserLaugh)}>
+          Toggle Laughing User
+        </button>
         <h4>All Users</h4>
-        <div>
+        <ul>
           {this.props.users.map(user => (
-            <div key={user.name}>{user.name}</div>
+            <li key={user.name}>{user.name}</li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
@@ -42,7 +46,7 @@ const mapModelsToProps = (models, props) => {
   return {
     doesUserLaugh: user.get('laughs'),
     users: showOnlyLaughingUsers ?
-      allUsers.toJSON().filter(user => user.get('laughs') === true)
+      allUsers.toJSON().filter(user => user.laughs === true) :
       allUsers.toJSON(),
     setUserLaughs(newVal) {
       user.set('laughs', newVal);
@@ -88,11 +92,11 @@ Now that you've created your HOC you can use it!
 const modelsMap = {
   user: userInstance,
   allUsers: userCollection,
-},
+};
 
 ReactDOM.render(
   // Pass the modelsMap to the HOC via the models prop.
-  <MyComponentConnected models={modelsMap} showOnlyLaughingUsers />,
+  <MyComponentConnected models={modelsMap} showOnlyLaughingUsers={true} />,
   document.getElementById('app')
 );
 ```
