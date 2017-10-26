@@ -4,6 +4,8 @@
 
 ## Example
 
+[![Edit connectBackboneToReact](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l5n4m0qk79?module=%2FDemo.js)
+
 ### connectBackboneToReact
 
 ```javascript
