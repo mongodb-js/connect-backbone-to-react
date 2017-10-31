@@ -127,6 +127,11 @@ ReactDOM.render(
 );
 ```
 
+## Rendering React Within Backbone.View
+
+This library's focus is on sharing Backbone.Models with React Components. It is not concerned with how to render React Components within Backbone.Views. [The React docs provide a possible implementation for this interopt.](https://reactjs.org/docs/integrating-with-other-libraries.html#embedding-react-in-a-backbone-view)
+
+
 ## License
 
 Apache 2.0
