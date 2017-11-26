@@ -135,6 +135,14 @@ ReactDOM.render(
 
 This library's focus is on sharing Backbone.Models with React Components. It is not concerned with how to render React Components within Backbone.Views. [The React docs provide a possible implementation for this interopt.](https://reactjs.org/docs/integrating-with-other-libraries.html#embedding-react-in-a-backbone-view)
 
+## Local development
+
+To develop this library locally, run the following commands in the project root directory:
+
+1. `npm run watch`. The library will be automatically compiled in the background as you make changes.
+2. `npm link` and then follow the instructions to use the local version of this library in another project that uses `connect-backbone-to-react`.
+
+Run `npm test` to run the unit tests.
 
 ## License
 
