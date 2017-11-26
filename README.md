@@ -2,6 +2,10 @@
 
 > Connect Backbone Models and Collections to React.
 
+## Usage
+
+`npm install connect-backbone-to-react` or `yarn add connect-backbone-to-react` in your React/Backbone project. See code samples below to how to integrate into your code.
+
 ## Example
 
 [![Edit connectBackboneToReact](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l5n4m0qk79?module=%2FDemo.js)
