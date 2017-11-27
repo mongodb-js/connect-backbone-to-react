@@ -2,6 +2,10 @@
 
 > Connect Backbone Models and Collections to React.
 
+## Usage
+
+`npm install connect-backbone-to-react` or `yarn add connect-backbone-to-react` in your React/Backbone project. See code samples below to how to integrate into your code.
+
 ## Example
 
 [![Edit connectBackboneToReact](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l5n4m0qk79?module=%2FDemo.js)
@@ -131,6 +135,14 @@ ReactDOM.render(
 
 This library's focus is on sharing Backbone.Models with React Components. It is not concerned with how to render React Components within Backbone.Views. [The React docs provide a possible implementation for this interopt.](https://reactjs.org/docs/integrating-with-other-libraries.html#embedding-react-in-a-backbone-view)
 
+## Local development
+
+To develop this library locally, run the following commands in the project root directory:
+
+1. `npm run watch`. The library will be automatically compiled in the background as you make changes.
+2. `npm link` and then follow the instructions to use the local version of this library in another project that uses `connect-backbone-to-react`.
+
+Run `npm test` to run the unit tests.
 
 ## License
 

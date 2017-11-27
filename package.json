@@ -8,6 +8,7 @@
     "test": "mocha",
     "ci": "npm run check && npm test",
     "compile": "babel lib/ --out-dir dist/",
+    "watch": "babel --watch lib/ --out-dir dist/",
     "prepublish": "npm run compile",
     "release": "standard-version"
   },
