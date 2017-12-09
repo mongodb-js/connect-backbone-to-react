@@ -168,7 +168,9 @@ describe('BackboneProvider', function() {
               <div className="name">
                 {this.props.user.name}
               </div>
-              <ConnectedChild models={propsModelsMap} />
+              <div className="child-wrapper">
+                <ConnectedChild models={propsModelsMap} />
+              </div>
             </div>
           );
         }
@@ -187,6 +189,7 @@ describe('BackboneProvider', function() {
         .findWhere((n) => n.text() === userModel.get('name'))
         .length;
       const modelsFromParent = wrapper
+        .find('.child-wrapper')
         .find('.name')
         .findWhere((n) => n.text() === otherUserModel.get('name'))
         .length;
