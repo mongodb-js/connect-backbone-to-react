@@ -106,4 +106,97 @@ describe('BackboneProvider', function() {
       assert(wrapper.find('.name').everyWhere(n => n.text() === 'Jill'));
     });
   });
+
+  describe('when "modelsMap" is provided via BackboneProvider and a parent component', function() {
+    it('merges models passed via BackboneProvider and a parent component', function() {
+      class UserAndSettings extends Component {
+        render() {
+          return (
+            <div>
+              <div className="name">
+                {this.props.user.name}
+              </div>
+              <div className="color">
+                {this.props.settings.color}
+              </div>
+            </div>
+          );
+        }
+      }
+      // eslint-disable-next-line no-unused-vars
+      const ConnectedUserAndSettings = connectBackboneToReact()(UserAndSettings);
+
+      const settingsModel = new Model({
+        color: 'purple',
+      });
+      const propsModelsMap = { settings: settingsModel };
+
+      wrapper = mount(
+        <BackboneProvider models={modelsMap}>
+          <ConnectedUserAndSettings models={propsModelsMap}/>
+        </BackboneProvider>
+      );
+
+      const modelsFromContext = wrapper
+        .find('.name')
+        .findWhere((n) => n.text() === userModel.get('name'))
+        .length;
+      const modelsFromParent = wrapper
+        .find('.color')
+        .findWhere((n) => n.text() === settingsModel.get('color'))
+        .length;
+
+      // Check that we've rendered data from models passed by both context and the parent component.
+      assert.equal(modelsFromContext, 1);
+      assert.equal(modelsFromParent, 1);
+    });
+
+    it('gives priority to models passed via a parent component', function() {
+      const otherUserModel = new Model({
+        name: 'Spencer',
+        age: 22,
+        hungry: true,
+      });
+
+      class PassingParent extends Component {
+        render() {
+          // We're using the same key (`user`) as the modelsMap passed via context.
+          const propsModelsMap = { user: otherUserModel };
+
+          return (
+            <div>
+              <div className="name">
+                {this.props.user.name}
+              </div>
+              <div className="child-wrapper">
+                <ConnectedChild models={propsModelsMap} />
+              </div>
+            </div>
+          );
+        }
+      }
+      // eslint-disable-next-line no-unused-vars
+      const ConnectedPassingParent = connectBackboneToReact()(PassingParent);
+
+      wrapper = mount(
+        <BackboneProvider models={modelsMap}>
+          <ConnectedPassingParent />
+        </BackboneProvider>
+      );
+
+      const modelsFromContext = wrapper
+        .find('.name')
+        .findWhere((n) => n.text() === userModel.get('name'))
+        .length;
+      const modelsFromParent = wrapper
+        .find('.child-wrapper')
+        .find('.name')
+        .findWhere((n) => n.text() === otherUserModel.get('name'))
+        .length;
+
+      // Check that we've given priority to models passed from the parent component.
+      assert.equal(modelsFromContext, 1);
+      assert.equal(modelsFromParent, 1);
+    });
+  });
 });
