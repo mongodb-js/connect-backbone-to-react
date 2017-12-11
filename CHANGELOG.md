@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.4.0...v1.5.0) (2017-12-11)
+
+
+### Bug Fixes
+
+* Add missing `assert` to test ([127d808](https://github.com/mongodb-js/connect-backbone-to-react/commit/127d808))
+
+
+### Features
+
+* Add watch mode for local development ([4e7fe43](https://github.com/mongodb-js/connect-backbone-to-react/commit/4e7fe43))
+* Merge models passed from context and props ([#15](https://github.com/mongodb-js/connect-backbone-to-react/issues/15)) ([cf2b9e8](https://github.com/mongodb-js/connect-backbone-to-react/commit/cf2b9e8)), closes [#14](https://github.com/mongodb-js/connect-backbone-to-react/issues/14)
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.0...v1.4.0) (2017-09-20)
 
