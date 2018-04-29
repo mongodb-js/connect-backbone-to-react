@@ -2,6 +2,74 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.4.0...v1.5.0) (2017-12-11)
+
+
+### Bug Fixes
+
+* Add missing `assert` to test ([127d808](https://github.com/mongodb-js/connect-backbone-to-react/commit/127d808))
+
+
+### Features
+
+* Add watch mode for local development ([4e7fe43](https://github.com/mongodb-js/connect-backbone-to-react/commit/4e7fe43))
+* Merge models passed from context and props ([#15](https://github.com/mongodb-js/connect-backbone-to-react/issues/15)) ([cf2b9e8](https://github.com/mongodb-js/connect-backbone-to-react/commit/cf2b9e8)), closes [#14](https://github.com/mongodb-js/connect-backbone-to-react/issues/14)
+
+
+
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.0...v1.4.0) (2017-09-20)
+
+
+### Features
+
+* Add props as second arg to mapModelsToProps ([d971b884e](https://github.com/mongodb-js/connect-backbone-to-react/commit/d971b884e))
+
+
+
+
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.1...v1.3.2) (2017-09-18)
+
+
+### Bug Fixes
+
+* Handle error when passed an undefined model ([e5f09c9](https://github.com/mongodb-js/connect-backbone-to-react/commit/e5f09c9))
+* Handle null models in default mapping ([ab0a0e2](https://github.com/mongodb-js/connect-backbone-to-react/commit/ab0a0e2))
+
+
+
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.3.0...v1.3.1) (2017-09-15)
+
+
+### Bug Fixes
+
+* Add models existence check on props update ([469073c](https://github.com/mongodb-js/connect-backbone-to-react/commit/469073c))
+
+
+
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.2.0...v1.3.0) (2017-09-13)
+
+
+### Features
+
+* Fix bug where models were not listened to when they were set as properties, after initial construction. ([7187bc7](https://github.com/mongodb-js/connect-backbone-to-react/commit/7187bc7))
+
+
+
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.1.0...v1.2.0) (2017-06-21)
+
+
+### Features
+
+* Update state when props passed to connected components change ([3e2f59f](https://github.com/mongodb-js/connect-backbone-to-react/commit/3e2f59f))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.0.1...v1.1.0) (2017-04-28)
 

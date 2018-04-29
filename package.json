@@ -1,13 +1,14 @@
 {
   "name": "connect-backbone-to-react",
   "description": "Connect Backbone Models and Collections to React.",
-  "version": "1.1.0",
+  "version": "1.5.0",
   "scripts": {
     "fmt": "mongodb-js-fmt",
     "check": "mongodb-js-precommit",
     "test": "mocha",
     "ci": "npm run check && npm test",
     "compile": "babel lib/ --out-dir dist/",
+    "watch": "babel --watch lib/ --out-dir dist/",
     "prepublish": "npm run compile",
     "release": "standard-version"
   },

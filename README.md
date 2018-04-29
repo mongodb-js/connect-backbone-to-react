@@ -2,7 +2,13 @@
 
 > Connect Backbone Models and Collections to React.
 
+## Usage
+
+`npm install connect-backbone-to-react` or `yarn add connect-backbone-to-react` in your React/Backbone project. See code samples below to how to integrate into your code.
+
 ## Example
+
+[![Edit connectBackboneToReact](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/l5n4m0qk79?module=%2FDemo.js)
 
 ### connectBackboneToReact
 
@@ -11,20 +17,25 @@ const UserModel = Backbone.Model.extend();
 const UserCollection = Backbone.Collection.extend({ model: UserModel });
 
 const userInstance = new UserModel({ name: 'Harry', laughs: true });
-const userCollection = new UserCollection([userInstance]);
+const anotherUserInstance = new UserModel({ name: 'Samantha', laughs: false });
+const userCollection = new UserCollection([userInstance, anotherUserInstance]);
 
 class MyComponent extends React.Component {
   render() {
     return (
       <div>
-        My user laughs: {this.props.doesUserLaugh}
-
+        <p>
+          My user laughs: {this.props.doesUserLaugh ? "yes" : "no"}
+        </p>
+        <button onClick={() => this.props.setUserLaughs(!this.props.doesUserLaugh)}>
+          Toggle Laughing User
+        </button>
         <h4>All Users</h4>
-        <div>
+        <ul>
           {this.props.users.map(user => (
-            <div key={user.name}>{user.name}</div>
+            <li key={user.name}>{user.name}</li>
           ))}
-        </div>
+        </ul>
       </div>
     );
   }
@@ -32,13 +43,17 @@ class MyComponent extends React.Component {
 
 // Maps Models to properties to give to the React Component. Optional.
 // Default behavior is to call `.toJSON()` on every Model and Collection.
-const mapModelsToProps = (models) => {
+// Second argument are props given to the React Component.
+const mapModelsToProps = (models, props) => {
   const { user, allUsers } = models;
+  const { showOnlyLaughingUsers } = props;
 
   // Everything returned from this function will be given as a prop to your Component.
   return {
     doesUserLaugh: user.get('laughs'),
-    users: allUsers.toJSON(),
+    users: showOnlyLaughingUsers ?
+      allUsers.toJSON().filter(user => user.laughs === true) :
+      allUsers.toJSON(),
     setUserLaughs(newVal) {
       user.set('laughs', newVal);
     },
@@ -83,11 +98,11 @@ Now that you've created your HOC you can use it!
 const modelsMap = {
   user: userInstance,
   allUsers: userCollection,
-},
+};
 
 ReactDOM.render(
   // Pass the modelsMap to the HOC via the models prop.
-  <MyComponentConnected models={modelsMap} />,
+  <MyComponentConnected models={modelsMap} showOnlyLaughingUsers={true} />,
   document.getElementById('app')
 );
 ```
@@ -115,6 +130,19 @@ ReactDOM.render(
   document.getElementById('app')
 );
 ```
+
+## Rendering React Within Backbone.View
+
+This library's focus is on sharing Backbone.Models with React Components. It is not concerned with how to render React Components within Backbone.Views. [The React docs provide a possible implementation for this interopt.](https://reactjs.org/docs/integrating-with-other-libraries.html#embedding-react-in-a-backbone-view)
+
+## Local development
+
+To develop this library locally, run the following commands in the project root directory:
+
+1. `npm run watch`. The library will be automatically compiled in the background as you make changes.
+2. `npm link` and then follow the instructions to use the local version of this library in another project that uses `connect-backbone-to-react`.
+
+Run `npm test` to run the unit tests.
 
 ## License
 
