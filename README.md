@@ -82,6 +82,12 @@ const options = {
     user: UserModel,
     allUsers: UserCollection,
   },
+
+  // Enable access to the wrapped component's ref with the `withRef` option.
+  // You can then access the wrapped component from the connected component's `getWrappedInstance()`.
+  // This is similar to react-redux's connectAdvanced() HOC.
+  // By default, `withRef` is false.
+  withRef: true,
 };
 
 const { connectBackboneToReact } = require('connect-backbone-to-react');
