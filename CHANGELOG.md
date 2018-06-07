@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.5.0...v1.6.0) (2018-06-07)
+
+
+### Features
+
+* Add access to wrapped component's ref ([#20](https://github.com/mongodb-js/connect-backbone-to-react/issues/20)) ([b33b567](https://github.com/mongodb-js/connect-backbone-to-react/commit/b33b567))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.4.0...v1.5.0) (2017-12-11)
 
