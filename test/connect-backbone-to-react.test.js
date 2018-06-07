@@ -631,4 +631,68 @@ describe('connectBackboneToReact', function() {
       assert.equal(setStateSpy.called, false);
     });
   });
+
+  describe('when NOT configured to provide ref to the wrapped component', function() {
+    beforeEach(function() {
+      // eslint-disable-next-line no-unused-vars
+      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+      stub = wrapper.find(TestComponent);
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('should throw an error when getWrappedInstance() is called', function() {
+      assert.throws(function() {
+        wrapper.instance().getWrappedInstance();
+      });
+    });
+  });
+
+  describe('when configured to provide ref to the wrapped component', function() {
+    beforeEach(function() {
+      // eslint-disable-next-line no-unused-vars
+      const ConnectedTest = connectBackboneToReact(
+        mapModelsToProps,
+        { withRef: true }
+      )(TestComponent);
+
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+      stub = wrapper.find(TestComponent);
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('should return the wrapped component via getWrappedInstance()', function() {
+      assert.equal(wrapper.instance().getWrappedInstance(), stub.node);
+    });
+
+    describe('and the returned wrapped component', function() {
+      let randomName;
+
+      beforeEach(function() {
+        randomName = Math.random().toString();
+      });
+
+      it('should be able to update the actual component', function() {
+        wrapper.instance().getWrappedInstance().props.changeName(randomName);
+        assert.equal(stub.node.props.name, randomName);
+      });
+
+      it('should reflect the changes made to the actual component', function() {
+        stub.node.props.changeName(randomName);
+        assert.equal(wrapper.instance().getWrappedInstance().props.name, randomName);
+      });
+
+      it('should reflect the changes made to the data model', function() {
+        userModel.set('name', randomName);
+        assert.equal(wrapper.instance().getWrappedInstance().props.name, randomName);
+      });
+    });
+  });
 });
