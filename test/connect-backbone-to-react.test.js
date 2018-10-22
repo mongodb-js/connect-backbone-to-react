@@ -594,15 +594,12 @@ describe('connectBackboneToReact', function() {
     });
   });
 
-  describe('when passed props change to include an undefined model', function() {
-    let setStateSpy;
-    let createListenerSpy;
-    let removeListenerSpy;
+  describe('when passed props change to include', function() {
+    let ConnectedTest;
 
     beforeEach(function() {
-      const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+      ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
       wrapper = mount(<ConnectedTest models={modelsMap} />);
-      stub = wrapper.find(TestComponent);
 
       const decoratorUserModel = new UserModel({
         name: 'Robert',
@@ -617,34 +614,42 @@ describe('connectBackboneToReact', function() {
       };
 
       wrapper.setProps({ models: initialModelsMap });
-
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
-      createListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
-      removeListenerSpy = sandbox.spy(ConnectedTest.prototype, 'removeEventListener');
-
-      const newModelsMap = {
-        user: userModel,
-        coll: userCollection,
-        decorator: undefined,
-      };
-
-      wrapper.setProps({ models: newModelsMap });
     });
 
     afterEach(function() {
       wrapper.unmount();
     });
 
-    it('calls setState once', function() {
-      assert.equal(setStateSpy.calledOnce, true);
-    });
+    describe('an undefined model', function() {
+      let setStateSpy;
+      let createListenerSpy;
+      let removeListenerSpy;
 
-    it('does not call createEventListener for the model', function() {
-      assert.equal(createListenerSpy.callCount, 0);
-    });
+      beforeEach(function() {
+        setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+        createListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
+        removeListenerSpy = sandbox.spy(ConnectedTest.prototype, 'removeEventListener');
 
-    it('calls removeEventListener once for the model', function() {
-      assert.equal(removeListenerSpy.calledOnce, true);
+        const newModelsMap = {
+          user: userModel,
+          coll: userCollection,
+          decorator: undefined,
+        };
+
+        wrapper.setProps({ models: newModelsMap });
+      });
+
+      it('calls setState once', function() {
+        assert.equal(setStateSpy.calledOnce, true);
+      });
+
+      it('does not call createEventListener for the model', function() {
+        assert.equal(createListenerSpy.callCount, 0);
+      });
+
+      it('calls removeEventListener once for the model', function() {
+        assert.equal(removeListenerSpy.calledOnce, true);
+      });
     });
   });
 
