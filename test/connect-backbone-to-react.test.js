@@ -631,7 +631,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(setStateSpy.callCount, 1);
     });
 
-    it('calls createEventListener once for the model', function() {
+    it('calls createEventListener once due to decoratorUserModel being added as a model', function() {
       assert.equal(createListenerSpy.callCount, 1);
       assert.equal(createListenerSpy.firstCall.args[0], 'decorator');
     });
@@ -659,7 +659,7 @@ describe('connectBackboneToReact', function() {
         assert.equal(createListenerSpy.callCount, 1);
       });
 
-      it('calls removeEventListener once for the model', function() {
+      it('calls removeEventListener once for decoratorUserModel', function() {
         assert.equal(removeListenerSpy.callCount, 1);
         assert.equal(removeListenerSpy.firstCall.args[0], 'decorator');
       });
