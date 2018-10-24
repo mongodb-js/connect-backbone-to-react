@@ -633,9 +633,10 @@ describe('connectBackboneToReact', function() {
 
     it('calls createEventListener once for the model', function() {
       assert.equal(createListenerSpy.callCount, 1);
+      assert.equal(createListenerSpy.firstCall.args[0], 'decorator');
     });
 
-    it('does not call removeEventListener for the model', function() {
+    it('does not call removeEventListener', function() {
       assert.equal(removeListenerSpy.callCount, 0);
     });
 
@@ -654,12 +655,13 @@ describe('connectBackboneToReact', function() {
         assert.equal(setStateSpy.callCount, 2);
       });
 
-      it('does not call createEventListener again for the model', function() {
+      it('does not call createEventListener again', function() {
         assert.equal(createListenerSpy.callCount, 1);
       });
 
       it('calls removeEventListener once for the model', function() {
         assert.equal(removeListenerSpy.callCount, 1);
+        assert.equal(removeListenerSpy.firstCall.args[0], 'decorator');
       });
     });
   });
