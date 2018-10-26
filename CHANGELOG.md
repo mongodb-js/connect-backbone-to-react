@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.6.0...v1.6.1) (2018-10-26)
+
+
+### Bug Fixes
+
+* adds check for null model to componentWillReceiveProps ([#21](https://github.com/mongodb-js/connect-backbone-to-react/issues/21)) ([9793020](https://github.com/mongodb-js/connect-backbone-to-react/commit/9793020))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.5.0...v1.6.0) (2018-06-07)
 
