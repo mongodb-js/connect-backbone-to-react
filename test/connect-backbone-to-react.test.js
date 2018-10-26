@@ -594,6 +594,78 @@ describe('connectBackboneToReact', function() {
     });
   });
 
+  describe('when passed props change to include', function() {
+    let ConnectedTest;
+    let setStateSpy;
+    let createListenerSpy;
+    let removeListenerSpy;
+
+    beforeEach(function() {
+      ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
+      wrapper = mount(<ConnectedTest models={modelsMap} />);
+
+      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      createListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
+      removeListenerSpy = sandbox.spy(ConnectedTest.prototype, 'removeEventListener');
+
+      const decoratorUserModel = new UserModel({
+        name: 'Robert',
+        age: '30',
+        hungry: false,
+      });
+
+      const initialModelsMap = {
+        user: userModel,
+        coll: userCollection,
+        decorator: decoratorUserModel,
+      };
+
+      wrapper.setProps({ models: initialModelsMap });
+    });
+
+    afterEach(function() {
+      wrapper.unmount();
+    });
+
+    it('calls setState once', function() {
+      assert.equal(setStateSpy.callCount, 1);
+    });
+
+    it('calls createEventListener once due to decoratorUserModel being added as a model', function() {
+      assert.equal(createListenerSpy.callCount, 1);
+      assert.equal(createListenerSpy.firstCall.args[0], 'decorator');
+    });
+
+    it('does not call removeEventListener', function() {
+      assert.equal(removeListenerSpy.callCount, 0);
+    });
+
+    describe('an undefined model', function() {
+      beforeEach(function() {
+        const newModelsMap = {
+          user: userModel,
+          coll: userCollection,
+          decorator: undefined,
+        };
+
+        wrapper.setProps({ models: newModelsMap });
+      });
+
+      it('calls setState again', function() {
+        assert.equal(setStateSpy.callCount, 2);
+      });
+
+      it('does not call createEventListener again', function() {
+        assert.equal(createListenerSpy.callCount, 1);
+      });
+
+      it('calls removeEventListener once for decoratorUserModel', function() {
+        assert.equal(removeListenerSpy.callCount, 1);
+        assert.equal(removeListenerSpy.firstCall.args[0], 'decorator');
+      });
+    });
+  });
+
   describe('when unmounted in an event listener and subscribed to "all" event', function() {
     // To add more color, "all" event handlers are triggered after individual event handlers.
     // That is to say, if you trigger "foo" the sequence of event handlers called is:
