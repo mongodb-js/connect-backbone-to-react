@@ -96,7 +96,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('passes mapped models and collections as properties to wrapped component', function() {
@@ -115,9 +115,10 @@ describe('connectBackboneToReact', function() {
 
     it('updates properties when props function changes models and collections ', function() {
       const newName = 'The Loud One';
-      stub.props().changeName(newName);
+      stub.prop('changeName')(newName);
+      wrapper.update();
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -125,9 +126,10 @@ describe('connectBackboneToReact', function() {
     it('updates properties when model and collections change', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
       assert.equal(wrapper.find('.name').text(), 'Banana');
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -141,7 +143,7 @@ describe('connectBackboneToReact', function() {
     });
 
     it('removes listeners when unmounting', function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
 
       assert(userOffSpy.calledOnce);
       assert.equal(userOffSpy.firstCall.args[0], ['all']);
@@ -169,7 +171,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('updates properties when model and collections change', function(done) {
@@ -177,9 +179,10 @@ describe('connectBackboneToReact', function() {
       userModel.set('name', newName);
 
       setTimeout(() => {
+        wrapper.update();
         assert.equal(wrapper.find('.name').text(), 'Banana');
         assert.equal(userModel.get('name'), newName);
-        assert.equal(stub.props().name, newName);
+        assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
         assert.equal(setStateSpy.callCount, 1);
 
@@ -191,7 +194,7 @@ describe('connectBackboneToReact', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
 
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
 
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, 'Harry');
@@ -202,7 +205,7 @@ describe('connectBackboneToReact', function() {
 
   describe('when mounted with an undefined model', function() {
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('the default should mount and unmount the component successfully', function() {
@@ -232,7 +235,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('sets one event handler on the userModel', function() {
@@ -247,9 +250,10 @@ describe('connectBackboneToReact', function() {
     it('updates properties when model\'s name changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
     });
 
     it('rerenders when tracked property changes', function() {
@@ -291,7 +295,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('sets 0 event handlers on the userModel', function() {
@@ -318,7 +322,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('passes connectedProps through', function() {
@@ -342,7 +346,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('uses default mapModelsToProps function', function() {
@@ -362,8 +366,9 @@ describe('connectBackboneToReact', function() {
     it('re-renders props when model changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
-      assert.equal(stub.props().user.name, 'Banana');
+      assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -388,7 +393,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('uses default mapModelsToProps function', function() {
@@ -409,8 +414,9 @@ describe('connectBackboneToReact', function() {
     it('re-renders props when model changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
-      assert.equal(stub.props().user.name, 'Banana');
+      assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
       assert.equal(setStateSpy.callCount, 1);
     });
@@ -523,7 +529,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('retrieves the correct model based on props', function() {
@@ -573,7 +579,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('calls setState once', function() {
@@ -624,7 +630,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('calls setState once', function() {
@@ -689,7 +695,7 @@ describe('connectBackboneToReact', function() {
       // Subscribe to an arbitrary event.
       userModel.on(arbitraryEvent, function() {
         // When called it unmounts an component.
-        wrapper.unmount();
+        if (wrapper.exists()) wrapper.unmount();
 
         // But because we're subscribed to the "all" event it will still trigger that handler,
         // calling setState when it shouldn't.
@@ -714,7 +720,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('should throw an error when getWrappedInstance() is called', function() {
@@ -737,11 +743,11 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('should return the wrapped component via getWrappedInstance()', function() {
-      assert.equal(wrapper.instance().getWrappedInstance(), stub.node);
+      assert.equal(wrapper.instance().getWrappedInstance(), stub.instance());
     });
 
     describe('and the returned wrapped component', function() {
@@ -753,11 +759,11 @@ describe('connectBackboneToReact', function() {
 
       it('should be able to update the actual component', function() {
         wrapper.instance().getWrappedInstance().props.changeName(randomName);
-        assert.equal(stub.node.props.name, randomName);
+        assert.equal(stub.instance().props.name, randomName);
       });
 
       it('should reflect the changes made to the actual component', function() {
-        stub.node.props.changeName(randomName);
+        stub.instance().props.changeName(randomName);
         assert.equal(wrapper.instance().getWrappedInstance().props.name, randomName);
       });
 

@@ -81,7 +81,7 @@ describe('BackboneProvider', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('passes mapped models and collections as properties to wrapped component', function() {
@@ -139,11 +139,11 @@ describe('BackboneProvider', function() {
 
       const modelsFromContext = wrapper
         .find('.name')
-        .findWhere((n) => n.text() === userModel.get('name'))
+        .findWhere((n) => !n.type() && n.text() === userModel.get('name'))
         .length;
       const modelsFromParent = wrapper
         .find('.color')
-        .findWhere((n) => n.text() === settingsModel.get('color'))
+        .findWhere((n) => !n.type() && n.text() === settingsModel.get('color'))
         .length;
 
       // Check that we've rendered data from models passed by both context and the parent component.
@@ -186,12 +186,12 @@ describe('BackboneProvider', function() {
 
       const modelsFromContext = wrapper
         .find('.name')
-        .findWhere((n) => n.text() === userModel.get('name'))
+        .findWhere((n) => !n.type() && n.text() === userModel.get('name'))
         .length;
       const modelsFromParent = wrapper
         .find('.child-wrapper')
         .find('.name')
-        .findWhere((n) => n.text() === otherUserModel.get('name'))
+        .findWhere((n) => !n.type() && n.text() === otherUserModel.get('name'))
         .length;
 
       // Check that we've given priority to models passed from the parent component.
