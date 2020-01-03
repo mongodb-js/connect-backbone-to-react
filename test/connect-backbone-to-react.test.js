@@ -143,7 +143,7 @@ describe('connectBackboneToReact', function() {
     });
 
     it('removes listeners when unmounting', function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
 
       assert(userOffSpy.calledOnce);
       assert.equal(userOffSpy.firstCall.args[0], ['all']);
@@ -194,7 +194,7 @@ describe('connectBackboneToReact', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
 
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
 
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, 'Harry');
@@ -205,7 +205,7 @@ describe('connectBackboneToReact', function() {
 
   describe('when mounted with an undefined model', function() {
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('the default should mount and unmount the component successfully', function() {
@@ -235,7 +235,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('sets one event handler on the userModel', function() {
@@ -295,7 +295,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('sets 0 event handlers on the userModel', function() {
@@ -322,7 +322,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('passes connectedProps through', function() {
@@ -346,7 +346,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('uses default mapModelsToProps function', function() {
@@ -393,7 +393,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('uses default mapModelsToProps function', function() {
@@ -529,7 +529,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('retrieves the correct model based on props', function() {
@@ -579,7 +579,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('calls setState once', function() {
@@ -630,7 +630,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('calls setState once', function() {
@@ -695,7 +695,7 @@ describe('connectBackboneToReact', function() {
       // Subscribe to an arbitrary event.
       userModel.on(arbitraryEvent, function() {
         // When called it unmounts an component.
-        if (wrapper.exists()) wrapper.unmount();
+        wrapper.unmount();
 
         // But because we're subscribed to the "all" event it will still trigger that handler,
         // calling setState when it shouldn't.
@@ -720,7 +720,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('should throw an error when getWrappedInstance() is called', function() {
@@ -743,7 +743,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('should return the wrapped component via getWrappedInstance()', function() {

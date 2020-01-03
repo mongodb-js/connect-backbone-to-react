@@ -81,7 +81,7 @@ describe('BackboneProvider', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      wrapper.unmount();
     });
 
     it('passes mapped models and collections as properties to wrapped component', function() {
