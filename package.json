@@ -1,7 +1,7 @@
 {
   "name": "connect-backbone-to-react",
   "description": "Connect Backbone Models and Collections to React.",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "scripts": {
     "fmt": "mongodb-js-fmt",
     "check": "mongodb-js-precommit",
