@@ -96,7 +96,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('passes mapped models and collections as properties to wrapped component', function() {
@@ -115,9 +115,10 @@ describe('connectBackboneToReact', function() {
 
     it('updates properties when props function changes models and collections ', function() {
       const newName = 'The Loud One';
-      stub.props().changeName(newName);
+      stub.prop('changeName')(newName);
+      wrapper.update();
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -125,9 +126,10 @@ describe('connectBackboneToReact', function() {
     it('updates properties when model and collections change', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
       assert.equal(wrapper.find('.name').text(), 'Banana');
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -169,7 +171,7 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      wrapper.unmount();
+      if (wrapper.exists()) wrapper.unmount();
     });
 
     it('updates properties when model and collections change', function(done) {
@@ -177,9 +179,10 @@ describe('connectBackboneToReact', function() {
       userModel.set('name', newName);
 
       setTimeout(() => {
+        wrapper.update();
         assert.equal(wrapper.find('.name').text(), 'Banana');
         assert.equal(userModel.get('name'), newName);
-        assert.equal(stub.props().name, newName);
+        assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
         assert.equal(setStateSpy.callCount, 1);
 
@@ -247,9 +250,10 @@ describe('connectBackboneToReact', function() {
     it('updates properties when model\'s name changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
       assert.equal(userModel.get('name'), newName);
-      assert.equal(stub.props().name, newName);
+      assert.equal(wrapper.find(TestComponent).prop('name'), newName);
     });
 
     it('rerenders when tracked property changes', function() {
@@ -362,8 +366,9 @@ describe('connectBackboneToReact', function() {
     it('re-renders props when model changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
-      assert.equal(stub.props().user.name, 'Banana');
+      assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
       assert.equal(setStateSpy.callCount, 4);
     });
@@ -409,8 +414,9 @@ describe('connectBackboneToReact', function() {
     it('re-renders props when model changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
+      wrapper.update();
 
-      assert.equal(stub.props().user.name, 'Banana');
+      assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
       assert.equal(setStateSpy.callCount, 1);
     });
@@ -741,7 +747,7 @@ describe('connectBackboneToReact', function() {
     });
 
     it('should return the wrapped component via getWrappedInstance()', function() {
-      assert.equal(wrapper.instance().getWrappedInstance(), stub.node);
+      assert.equal(wrapper.instance().getWrappedInstance(), stub.instance());
     });
 
     describe('and the returned wrapped component', function() {
@@ -753,11 +759,11 @@ describe('connectBackboneToReact', function() {
 
       it('should be able to update the actual component', function() {
         wrapper.instance().getWrappedInstance().props.changeName(randomName);
-        assert.equal(stub.node.props.name, randomName);
+        assert.equal(stub.instance().props.name, randomName);
       });
 
       it('should reflect the changes made to the actual component', function() {
-        stub.node.props.changeName(randomName);
+        stub.instance().props.changeName(randomName);
         assert.equal(wrapper.instance().getWrappedInstance().props.name, randomName);
       });
 
