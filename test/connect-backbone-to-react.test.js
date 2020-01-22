@@ -86,10 +86,10 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when mounted', function() {
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
@@ -120,7 +120,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
-      assert.equal(setStateSpy.callCount, 4);
+      assert.equal(forceUpdateSpy.callCount, 4);
     });
 
     it('updates properties when model and collections change', function() {
@@ -131,7 +131,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
-      assert.equal(setStateSpy.callCount, 4);
+      assert.equal(forceUpdateSpy.callCount, 4);
     });
 
     it('creates listeners for every model', function() {
@@ -158,13 +158,13 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when mounted with debounce set to true', function() {
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
         { debounce: true }
       )(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
@@ -184,7 +184,7 @@ describe('connectBackboneToReact', function() {
         assert.equal(userModel.get('name'), newName);
         assert.equal(wrapper.find(TestComponent).prop('name'), newName);
 
-        assert.equal(setStateSpy.callCount, 1);
+        assert.equal(forceUpdateSpy.callCount, 1);
 
         done();
       }, 0);
@@ -199,7 +199,7 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('name'), newName);
       assert.equal(stub.props().name, 'Harry');
 
-      assert.equal(setStateSpy.callCount, 0);
+      assert.equal(forceUpdateSpy.callCount, 0);
     });
   });
 
@@ -217,7 +217,7 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when mounted with custom event names', function() {
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
@@ -228,7 +228,7 @@ describe('connectBackboneToReact', function() {
           },
         }
       )(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
@@ -259,7 +259,7 @@ describe('connectBackboneToReact', function() {
     it('rerenders when tracked property changes', function() {
       const newName = 'Banana';
       userModel.set('name', newName);
-      assert.equal(setStateSpy.callCount, 1);
+      assert.equal(forceUpdateSpy.callCount, 1);
     });
 
     it('does not update properties when non tracked property changes', function() {
@@ -269,13 +269,13 @@ describe('connectBackboneToReact', function() {
       assert.equal(userModel.get('age'), newAge);
       assert.equal(stub.props().age, 25);
 
-      assert.equal(setStateSpy.callCount, 0);
+      assert.equal(forceUpdateSpy.callCount, 0);
     });
 
     it('does not rerender when non tracked property changes', function() {
       const newAge = 99;
       userModel.set('age', newAge);
-      assert.equal(setStateSpy.callCount, 0);
+      assert.equal(forceUpdateSpy.callCount, 0);
     });
   });
 
@@ -336,10 +336,10 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when only given modelsMap object', function() {
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact()(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
@@ -370,12 +370,12 @@ describe('connectBackboneToReact', function() {
 
       assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
-      assert.equal(setStateSpy.callCount, 4);
+      assert.equal(forceUpdateSpy.callCount, 4);
     });
   });
 
   describe('when given modelsMap and event options', function() {
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         null,
@@ -386,7 +386,7 @@ describe('connectBackboneToReact', function() {
           },
         }
       )(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
       stub = wrapper.find(TestComponent);
@@ -418,13 +418,13 @@ describe('connectBackboneToReact', function() {
 
       assert.equal(wrapper.find(TestComponent).getElement().props.user.name, 'Banana');
 
-      assert.equal(setStateSpy.callCount, 1);
+      assert.equal(forceUpdateSpy.callCount, 1);
     });
   });
 
   describe('when modelTypes are defined on the options object', function() {
     describe('and the model given is not an instance of required modelType', function() {
-      let setStateSpy;
+      let forceUpdateSpy;
       let errObj;
 
       beforeEach(function() {
@@ -436,7 +436,7 @@ describe('connectBackboneToReact', function() {
             },
           }
         )(TestComponent);
-        setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+        forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
         settingsModel = new SettingsModel();
         modelsMap = {
@@ -451,7 +451,7 @@ describe('connectBackboneToReact', function() {
       });
 
       it('does not render', function() {
-        assert.equal(setStateSpy.callCount, 0);
+        assert.equal(forceUpdateSpy.callCount, 0);
       });
 
       it('throws an error', function() {
@@ -505,10 +505,10 @@ describe('connectBackboneToReact', function() {
 
     let a;
     let b;
-    let setStateSpy;
+    let forceUpdateSpy;
     beforeEach(function() {
       let ConnectedTest = connectBackboneToReact(mapWithProps)(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
       a = new UserModel({
         name: 'A',
         age: '10',
@@ -536,8 +536,8 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.find('.name').text(), a.get('name'));
       assert.equal(stub.find('.age').text(), a.get('age'));
 
-      // Using props should not increase the number of times setState is called.
-      assert.equal(setStateSpy.calledOnce, false);
+      // Using props should not increase the number of times forceUpdate is called.
+      assert.equal(forceUpdateSpy.calledOnce, false);
     });
 
     it('update the models based on new props', function() {
@@ -550,16 +550,14 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when passed props change', function() {
-    let setStateSpy;
     let newName;
     let newAge;
     let newUserModel;
 
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
 
-      wrapper = mount(<ConnectedTest models={modelsMap} />);
+      wrapper = mount(React.createElement(ConnectedTest, { models: modelsMap }));
       stub = wrapper.find(TestComponent);
 
       newName = 'Robert';
@@ -582,10 +580,6 @@ describe('connectBackboneToReact', function() {
       wrapper.unmount();
     });
 
-    it('calls setState once', function() {
-      assert.equal(setStateSpy.calledOnce, true);
-    });
-
     it('renders the new props', function() {
       assert.equal(stub.find('.name').text(), newName);
       assert.equal(stub.find('.age').text(), newAge);
@@ -602,7 +596,6 @@ describe('connectBackboneToReact', function() {
 
   describe('when passed props change to include', function() {
     let ConnectedTest;
-    let setStateSpy;
     let createListenerSpy;
     let removeListenerSpy;
 
@@ -610,7 +603,6 @@ describe('connectBackboneToReact', function() {
       ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
       wrapper = mount(<ConnectedTest models={modelsMap} />);
 
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
       createListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
       removeListenerSpy = sandbox.spy(ConnectedTest.prototype, 'removeEventListener');
 
@@ -633,10 +625,6 @@ describe('connectBackboneToReact', function() {
       wrapper.unmount();
     });
 
-    it('calls setState once', function() {
-      assert.equal(setStateSpy.callCount, 1);
-    });
-
     it('calls createEventListener once due to decoratorUserModel being added as a model', function() {
       assert.equal(createListenerSpy.callCount, 1);
       assert.equal(createListenerSpy.firstCall.args[0], 'decorator');
@@ -655,10 +643,6 @@ describe('connectBackboneToReact', function() {
         };
 
         wrapper.setProps({ models: newModelsMap });
-      });
-
-      it('calls setState again', function() {
-        assert.equal(setStateSpy.callCount, 2);
       });
 
       it('does not call createEventListener again', function() {
@@ -683,12 +667,12 @@ describe('connectBackboneToReact', function() {
     // the "allEvents" value is stale.
 
     const arbitraryEvent = 'arbitraryEvent';
-    let setStateSpy;
+    let forceUpdateSpy;
 
     beforeEach(function() {
       // eslint-disable-next-line no-unused-vars
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
-      setStateSpy = sandbox.spy(ConnectedTest.prototype, 'setState');
+      forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);
 
@@ -698,15 +682,15 @@ describe('connectBackboneToReact', function() {
         wrapper.unmount();
 
         // But because we're subscribed to the "all" event it will still trigger that handler,
-        // calling setState when it shouldn't.
+        // calling forceUpdate when it shouldn't.
       });
 
       // Trigger the event.
       userModel.trigger(arbitraryEvent);
     });
 
-    it('does not call setState', function() {
-      assert.equal(setStateSpy.called, false);
+    it('does not call forceUpdate', function() {
+      assert.equal(forceUpdateSpy.called, false);
     });
   });
 
