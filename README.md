@@ -16,18 +16,18 @@
 const UserModel = Backbone.Model.extend();
 const UserCollection = Backbone.Collection.extend({ model: UserModel });
 
-const userInstance = new UserModel({ name: 'Harry', laughs: true });
-const anotherUserInstance = new UserModel({ name: 'Samantha', laughs: false });
+const userInstance = new UserModel({ name: "Harry", laughs: true });
+const anotherUserInstance = new UserModel({ name: "Samantha", laughs: false });
 const userCollection = new UserCollection([userInstance, anotherUserInstance]);
 
 class MyComponent extends React.Component {
   render() {
     return (
       <div>
-        <p>
-          My user laughs: {this.props.doesUserLaugh ? "yes" : "no"}
-        </p>
-        <button onClick={() => this.props.setUserLaughs(!this.props.doesUserLaugh)}>
+        <p>My user laughs: {this.props.doesUserLaugh ? "yes" : "no"}</p>
+        <button
+          onClick={() => this.props.setUserLaughs(!this.props.doesUserLaugh)}
+        >
           Toggle Laughing User
         </button>
         <h4>All Users</h4>
@@ -50,13 +50,13 @@ const mapModelsToProps = (models, props) => {
 
   // Everything returned from this function will be given as a prop to your Component.
   return {
-    doesUserLaugh: user.get('laughs'),
-    users: showOnlyLaughingUsers ?
-      allUsers.toJSON().filter(user => user.laughs === true) :
-      allUsers.toJSON(),
+    doesUserLaugh: user.get("laughs"),
+    users: showOnlyLaughingUsers
+      ? allUsers.toJSON().filter(user => user.laughs === true)
+      : allUsers.toJSON(),
     setUserLaughs(newVal) {
-      user.set('laughs', newVal);
-    },
+      user.set("laughs", newVal);
+    }
   };
 };
 
@@ -70,7 +70,7 @@ const options = {
   // that will cause your React Component to re-render.
   // By default it's ['all'] for every Model and Collection given.
   events: {
-    user: ['change:name', 'change:laughs'],
+    user: ["change:name", "change:laughs"]
     // You can disable listening to events by passing in `false` or an empty array.
   },
 
@@ -80,20 +80,23 @@ const options = {
   // By default no modelTypes are defined.
   modelTypes: {
     user: UserModel,
-    allUsers: UserCollection,
+    allUsers: UserCollection
   },
 
   // Enable access to the wrapped component's ref with the `withRef` option.
   // You can then access the wrapped component from the connected component's `getWrappedInstance()`.
   // This is similar to react-redux's connectAdvanced() HOC.
   // By default, `withRef` is false.
-  withRef: true,
+  withRef: true
 };
 
-const { connectBackboneToReact } = require('connect-backbone-to-react');
+const { connectBackboneToReact } = require("connect-backbone-to-react");
 
 // Create our Connected Higher order Component (HOC).
-const MyComponentConnected = connectBackboneToReact(mapModelsToProps, options)(MyComponent);
+const MyComponentConnected = connectBackboneToReact(
+  mapModelsToProps,
+  options
+)(MyComponent);
 ```
 
 Now that you've created your HOC you can use it!
@@ -103,13 +106,13 @@ Now that you've created your HOC you can use it!
 // your mapModelsToProps function.
 const modelsMap = {
   user: userInstance,
-  allUsers: userCollection,
+  allUsers: userCollection
 };
 
 ReactDOM.render(
   // Pass the modelsMap to the HOC via the models prop.
   <MyComponentConnected models={modelsMap} showOnlyLaughingUsers={true} />,
-  document.getElementById('app')
+  document.getElementById("app")
 );
 ```
 
@@ -149,6 +152,14 @@ To develop this library locally, run the following commands in the project root 
 2. `npm link` and then follow the instructions to use the local version of this library in another project that uses `connect-backbone-to-react`.
 
 Run `npm test` to run the unit tests.
+
+### Releasing a new version
+
+1. Make sure you have up to date `node_modules` before you proceed. Can be done via `npm ci`
+2. Update the version via: `npm run release -- --release-as=major|minor|patch`
+3. Optionally manually edit the revised `CHANGELOG.md` file. Commit changes.
+4. Follow the directions from step 2: run `git push --follow-tags origin master; npm publish` to publish
+5. Rejoice!
 
 ## License
 
