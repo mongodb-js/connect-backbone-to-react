@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v2.0.0...v3.0.0) (2020-01-30)
 
-
+* Now requires at least React v16.6.0
+* Removed usage of legacy Context API
+* Moved to new React Context API
+* Functionality should be equivalent, but with all things be sure to test your application.
 
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v1.6.1...v2.0.0) (2020-01-15)
