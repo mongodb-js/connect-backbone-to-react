@@ -140,6 +140,43 @@ ReactDOM.render(
 );
 ```
 
+### useBackboneContext
+When used in a descendent of the Backbone Provider, the `useBackboneContext` hook allows access to values of all models and collections on the Provider's context, converted to JSON. 
+
+```javascript
+const { useBackboneContext } = require('connect-backbone-to-react');
+
+const modelsMap = {
+  user: userInstance,
+  allUsers: userCollection,
+},
+
+const ComponentUsingHooks = () => {
+  const { user, allUsers } = useBackboneContext();
+  render (
+    <>
+      <div>
+        <h2>Primary User</h2>
+        <ul>
+          <li>{user.name}</li>
+        </ul>
+      </div>
+
+      <div>
+      <h2>Secondary Users</h2>
+      <ul>
+        {allUsers.map(user => (
+          <li key={user.name}>
+            {user.name}
+          </li>
+        ))}
+        </ul>
+      </div>
+    </>
+  );
+}
+```
+
 ## Rendering React Within Backbone.View
 
 This library's focus is on sharing Backbone.Models with React Components. It is not concerned with how to render React Components within Backbone.Views. [The React docs provide a possible implementation for this interopt.](https://reactjs.org/docs/integrating-with-other-libraries.html#embedding-react-in-a-backbone-view)

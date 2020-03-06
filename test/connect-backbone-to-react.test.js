@@ -1,9 +1,9 @@
 const assert = require('assert');
-const { mount } = require('enzyme');
+const {mount} = require('enzyme');
 const sinon = require('sinon');
 const React = require('react');
-const { Component } = React;
-const { Model, Collection } = require('backbone');
+const {Component} = React;
+const {Model, Collection} = require('backbone');
 const connectBackboneToReact = require('../lib/connect-backbone-to-react');
 
 describe('connectBackboneToReact', function() {
@@ -68,7 +68,7 @@ describe('connectBackboneToReact', function() {
       coll: userCollection,
     };
 
-    mapModelsToProps = function({ user, coll }) {
+    mapModelsToProps = function({user, coll}) {
       return {
         name: user.get('name'),
         age: user.get('age'),
@@ -96,7 +96,9 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      if (wrapper.exists()) {
+        wrapper.unmount();
+      }
     });
 
     it('passes mapped models and collections as properties to wrapped component', function() {
@@ -104,7 +106,11 @@ describe('connectBackboneToReact', function() {
       assert.equal(stub.props().age, 25);
       assert.equal(stub.props().hungry, true);
       assert.equal(typeof stub.props().changeName, 'function');
-      assert.deepEqual(stub.props().users, [ { name: 'Harry', age: 25, hungry: true } ]);
+      assert.deepEqual(stub.props().users, [{
+        name: 'Harry',
+        age: 25,
+        hungry: true,
+      }]);
     });
 
     it('renders wrapped component', function() {
@@ -162,7 +168,9 @@ describe('connectBackboneToReact', function() {
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
-        { debounce: true }
+        {
+          debounce: true,
+        }
       )(TestComponent);
       forceUpdateSpy = sandbox.spy(ConnectedTest.prototype, 'forceUpdate');
 
@@ -171,7 +179,9 @@ describe('connectBackboneToReact', function() {
     });
 
     afterEach(function() {
-      if (wrapper.exists()) wrapper.unmount();
+      if (wrapper.exists()) {
+        wrapper.unmount();
+      }
     });
 
     it('updates properties when model and collections change', function(done) {
@@ -211,7 +221,9 @@ describe('connectBackboneToReact', function() {
     it('the default should mount and unmount the component successfully', function() {
       const ConnectedTest = connectBackboneToReact()(TestComponent);
       const eventListenerSpy = sandbox.spy(ConnectedTest.prototype, 'createEventListener');
-      wrapper = mount(<ConnectedTest models={{user: null}} />);
+      wrapper = mount(<ConnectedTest models={{
+        user: null,
+      }} />);
       assert.equal(eventListenerSpy.callCount, 0);
     });
   });
@@ -493,9 +505,13 @@ describe('connectBackboneToReact', function() {
   });
 
   describe('when using props in mapModelsToProps', function() {
-    function mapWithProps({ coll }, { name }) {
-      if (!name) return {};
-      const user = coll.findWhere({ name });
+    function mapWithProps({coll}, {name}) {
+      if (!name) {
+        return {};
+      }
+      const user = coll.findWhere({
+        name,
+      });
       return {
         name: user.get('name'),
         age: user.get('age'),
@@ -541,7 +557,9 @@ describe('connectBackboneToReact', function() {
     });
 
     it('update the models based on new props', function() {
-      wrapper.setProps({ name: 'B'});
+      wrapper.setProps({
+        name: 'B',
+      });
       b.set('hungry', true);
 
       assert.equal(stub.find('.name').text(), b.get('name'));
@@ -557,7 +575,9 @@ describe('connectBackboneToReact', function() {
     beforeEach(function() {
       const ConnectedTest = connectBackboneToReact(mapModelsToProps)(TestComponent);
 
-      wrapper = mount(React.createElement(ConnectedTest, { models: modelsMap }));
+      wrapper = mount(React.createElement(ConnectedTest, {
+        models: modelsMap,
+      }));
       stub = wrapper.find(TestComponent);
 
       newName = 'Robert';
@@ -573,7 +593,9 @@ describe('connectBackboneToReact', function() {
         coll: userCollection,
       };
 
-      wrapper.setProps({ models: newModelsMap });
+      wrapper.setProps({
+        models: newModelsMap,
+      });
     });
 
     afterEach(function() {
@@ -618,7 +640,9 @@ describe('connectBackboneToReact', function() {
         decorator: decoratorUserModel,
       };
 
-      wrapper.setProps({ models: initialModelsMap });
+      wrapper.setProps({
+        models: initialModelsMap,
+      });
     });
 
     afterEach(function() {
@@ -642,7 +666,9 @@ describe('connectBackboneToReact', function() {
           decorator: undefined,
         };
 
-        wrapper.setProps({ models: newModelsMap });
+        wrapper.setProps({
+          models: newModelsMap,
+        });
       });
 
       it('does not call createEventListener again', function() {
@@ -681,8 +707,8 @@ describe('connectBackboneToReact', function() {
         // When called it unmounts an component.
         wrapper.unmount();
 
-        // But because we're subscribed to the "all" event it will still trigger that handler,
-        // calling forceUpdate when it shouldn't.
+      // But because we're subscribed to the "all" event it will still trigger that handler,
+      // calling forceUpdate when it shouldn't.
       });
 
       // Trigger the event.
@@ -719,7 +745,9 @@ describe('connectBackboneToReact', function() {
       // eslint-disable-next-line no-unused-vars
       const ConnectedTest = connectBackboneToReact(
         mapModelsToProps,
-        { withRef: true }
+        {
+          withRef: true,
+        }
       )(TestComponent);
 
       wrapper = mount(<ConnectedTest models={modelsMap} />);

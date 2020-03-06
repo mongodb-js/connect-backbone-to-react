@@ -1,9 +1,9 @@
 const assert = require('assert');
-const { mount } = require('enzyme');
+const {mount} = require('enzyme');
 const sinon = require('sinon');
 const React = require('react');
-const { Component } = React;
-const { Model, Collection } = require('backbone');
+const {Component} = React;
+const {Model, Collection} = require('backbone');
 const BackboneProvider = require('../lib/backbone-provider'); // eslint-disable-line no-unused-vars
 const connectBackboneToReact = require('../lib/connect-backbone-to-react');
 
@@ -100,8 +100,14 @@ describe('BackboneProvider', function() {
     });
 
     it('should handle updates to passed props', function() {
-      const model = new Model({ name: 'Jill' });
-      wrapper.setProps({ models: { user: model }});
+      const model = new Model({
+        name: 'Jill',
+      });
+      wrapper.setProps({
+        models: {
+          user: model,
+        },
+      });
 
       assert(wrapper.find('.name').everyWhere(n => n.text() === 'Jill'));
     });
@@ -129,7 +135,9 @@ describe('BackboneProvider', function() {
       const settingsModel = new Model({
         color: 'purple',
       });
-      const propsModelsMap = { settings: settingsModel };
+      const propsModelsMap = {
+        settings: settingsModel,
+      };
 
       wrapper = mount(
         <BackboneProvider models={modelsMap}>
@@ -161,7 +169,9 @@ describe('BackboneProvider', function() {
       class PassingParent extends Component {
         render() {
           // We're using the same key (`user`) as the modelsMap passed via context.
-          const propsModelsMap = { user: otherUserModel };
+          const propsModelsMap = {
+            user: otherUserModel,
+          };
 
           return (
             <div>
