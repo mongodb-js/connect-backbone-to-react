@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v3.0.0...v3.1.0) (2022-07-05)
+
+
+### Features
+
+* Support React 17 and 18 as peerDependencies ([eee15fb](https://github.com/mongodb-js/connect-backbone-to-react/commit/eee15fb))
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/mongodb-js/connect-backbone-to-react/compare/v2.0.0...v3.0.0) (2020-01-30)
 
