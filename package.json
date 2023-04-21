@@ -12,6 +12,7 @@
     "prepublish": "npm run compile",
     "release": "standard-version"
   },
+  "types": "types/index.d.ts",
   "homepage": "http://github.com/mongodb-js/connect-backbone-to-react",
   "repository": {
     "type": "git",
