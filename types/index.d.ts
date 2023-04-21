@@ -14,8 +14,8 @@ export declare function connectBackboneToReact<Model extends {}, ModelProps exte
 ) => React.ComponentType<Omit<CombinedProps, keyof ModelProps>>;
 
 
-interface BackboneProviderProps<M> {
-  models: M
+interface BackboneProviderProps<Models> {
+  models: Models
 }
 
 export declare function BackboneProvider<Models extends {}>(props: PropsWithChildren<BackboneProviderProps<Models>>): FunctionComponentElement<ProviderProps<Models>>;
