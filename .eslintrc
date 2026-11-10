@@ -1,5 +1,6 @@
 {
-  "extends": ["mongodb-js/node"],
+  "extends": ["eslint:recommended"],
+  "plugins": ["react"],
   "env": {
     "browser": true,
     "node": true,
@@ -13,11 +14,13 @@
     }
   },
   "rules": {
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
       "imports": "always-multiline",
-      "exports": "always-multiline",
+      "exports": "always-multiline"
     }]
   }
 }
